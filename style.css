@@ -44,12 +44,3 @@ main {
   border: 1px solid #ccc;
   border-top: none;
 }
-
-/* Style the close button */
-.topright {
-  float: right;
-  cursor: pointer;
-  font-size: 28px;
-}
-
-.topright:hover {color: red;}

@@ -1,0 +1,17 @@
+{
+  "models": [
+    {
+      "name": "office",
+      "author": "author1",
+      "link": "https://sketchfab.com/sebodeweb",
+      "path": "./models/office/license.txt"
+    }
+  ],
+//  "musics": [
+//    {
+//      "name": "music1",
+//      "author": "author1",
+//      "link": "https://www.youtube.com/watch?v=QH2-TGUlwu4"
+//    }
+//  ]
+}
