@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Portfolio</title>
-  </head>
-  <body>
-    <script type="module" src="/main.js"></script>
-  </body>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<main>
+    <header>
+        <h1>Julien Cousin-Alliot</h1>
+        <p>aka Nispeon</p>
+    </header>
+    <nav>
+        <button id="defaultOpen" class="tablinks" data-tab="about">About</button>
+        <button class="tablinks" data-tab="projects">Projects</button>
+        <button class="tablinks" data-tab="contact">Contact</button>
+    </nav>
+    <section id="about" class="tabcontent">
+        <h2>About</h2>
+        <p>
+            I'm a 20 years old french student in computer science. I'm currently
+            studying at the University of Lille, in France. I'm also a web
+            developer, and I'm currently working on a few projects.
+        </p>
+    </section>
+    <section id="projects" class="tabcontent">
+        <h2>Projects</h2>
+        <p>
+            I'm currently working on a few projects, including a website for
+            my university, and a few other projects.
+        </p>
+    </section>
+    <section id="contact" class="tabcontent">
+        <h2>Contact</h2>
+        <p>
+            You can contact me on my email address: <a href="mailto:zz">zz</a>
+        </p>
+    </section>
+</main>
+<script type="module" src="/main.js"></script>
+</body>
 </html>
