@@ -1,6 +1,8 @@
 import './style.css'
 import officeModel from './assets/models/office/scene.gltf?url';
 import bedModel from './assets/models/bed/scene.gltf?url';
+import catModel from './assets/models/cat/scene.gltf?url';
+import puffModel from './assets/models/jigglypuff/scene.gltf?url';
 import parquet from './assets/textures/parquet.png?url';
 
 import * as THREE from 'three'
@@ -8,8 +10,9 @@ import {TWEEN} from "three/addons/libs/tween.module.min.js";
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TransformControls } from "three/addons/controls/TransformControls.js";
 
-const debug = true;
+const debug = false;
 
 /* THREE JS */
 
@@ -20,21 +23,21 @@ const debug = true;
     const cameraPositions = {
         'about': {
             'position': {
-                x: -11,
-                y: 5.5,
-                z: -5.2
+                x: -9.77,
+                y: 3.75,
+                z: 5.42
             },
             'rotation': {
-                x: -1.5,
-                y: 0.9,
-                z: 1.5
+                x: -0.57,
+                y: 0.72,
+                z: 0.60
             }
         },
         'projects': {
             'position': {
-                x: -3,
-                y: 3,
-                z: 2
+                x: 1,
+                y: 1.5,
+                z: -8
             },
             'rotation': {
                 x: 0,
@@ -99,14 +102,16 @@ const debug = true;
     scene.add(screenLight);
 
     const bedLight = new THREE.PointLight(0xffffff);
-    bedLight.position.set(-22.5, -2, -6);
+    bedLight.position.set(-15, 1, 3);
     bedLight.intensity = 0.4;
     scene.add(bedLight);
 
     // 3D
     const loader = new GLTFLoader();
-        // Particles
 
+    const ModelControls = new TransformControls(camera, renderer.domElement);
+
+        // Particles
         const particles = [];
 
         function addAmbientParticle() {
@@ -138,8 +143,23 @@ const debug = true;
             }
         );
 
-        // Walls
+        // Jigglypuff
+        let puff
+        loader.load(
+            puffModel,
+            function ( gltf ) {
+                gltf.scene.children[0].scale.set(0.002, 0.002, 0.002);
+                gltf.scene.position.set(-1.2, 0.2, -17.6);
+                gltf.scene.rotation.set(-0.41, 0.53, 0.47);
 
+                puff = gltf.scene;
+
+                scene.add( gltf.scene );
+                animate();
+            }
+        );
+
+        // Walls
         const roomBackWall = new THREE.Mesh(
             new THREE.BoxGeometry(200, 200, 1),
             new THREE.MeshStandardMaterial({ color: 0x083056 })
@@ -188,8 +208,44 @@ const debug = true;
                 gltf.scene.rotation.set(0, 0.3, 0);
                 scene.add( gltf.scene );
                 animate();
+            },
+        );
+
+        // Cat
+        let cat
+        loader.load(
+            catModel,
+            function ( gltf ) {
+                gltf.scene.children[0].scale.set(0.25, 0.25, 0.25);
+                gltf.scene.position.set(-19.23, -2, 3.15);
+                gltf.scene.rotation.set(-0.05, -0.88, 0.06);
+
+                cat = gltf.scene;
+
+                scene.add( gltf.scene );
+                animate();
             }
         );
+
+        ModelControls.addEventListener('change', () => {
+            // console.log(puff.position, puff.rotation, puff.scale);
+        });
+
+    scene.add(ModelControls);
+
+    window.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'w':
+                ModelControls.setMode('translate');
+                break;
+            case 'e':
+                ModelControls.setMode('rotate');
+                break;
+            case 'r':
+                ModelControls.setMode('scale');
+                break;
+        }
+    });
 
     // Camera
     function tweenCamera(camera, position, rotation, duration) {

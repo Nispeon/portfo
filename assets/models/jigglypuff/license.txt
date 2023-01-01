@@ -1,0 +1,11 @@
+Model Information:
+* title:	Pokemon Jigglypuff
+* source:	https://sketchfab.com/3d-models/pokemon-jigglypuff-846a4936fa3f45cf840d25cbd7382e85
+* author:	IgorG (https://sketchfab.com/toporcheg)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Pokemon Jigglypuff" (https://sketchfab.com/3d-models/pokemon-jigglypuff-846a4936fa3f45cf840d25cbd7382e85) by IgorG (https://sketchfab.com/toporcheg) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

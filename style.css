@@ -1,3 +1,7 @@
+:root {
+  font-family: 'Roboto', sans-serif;
+}
+
 canvas {
   position: fixed;
   top: 0;

@@ -11,6 +11,18 @@
       "author": "Ankledot",
       "link": "https://sketchfab.com/Ankledot",
       "path": "./models/bed/license.txt"
+    },
+    {
+      "name": "cat",
+      "author": "Pneuma01",
+      "link": "https://sketchfab.com/Pneuma01",
+      "path": "./models/cat/license.txt"
+    },
+    {
+      "name": "jigglypuff",
+      "author": "IgorG",
+      "link": "https://sketchfab.com/toporcheg",
+      "path": "./models/jigglypuff/license.txt"
     }
   ]
 }
