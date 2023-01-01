@@ -2,16 +2,15 @@
   "models": [
     {
       "name": "office",
-      "author": "author1",
+      "author": "sebodeweb",
       "link": "https://sketchfab.com/sebodeweb",
       "path": "./models/office/license.txt"
+    },
+    {
+      "name": "bed",
+      "author": "Ankledot",
+      "link": "https://sketchfab.com/Ankledot",
+      "path": "./models/bed/license.txt"
     }
-  ],
-//  "musics": [
-//    {
-//      "name": "music1",
-//      "author": "author1",
-//      "link": "https://www.youtube.com/watch?v=QH2-TGUlwu4"
-//    }
-//  ]
+  ]
 }

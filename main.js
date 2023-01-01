@@ -1,12 +1,15 @@
 import './style.css'
 import officeModel from './assets/models/office/scene.gltf?url';
+import bedModel from './assets/models/bed/scene.gltf?url';
 import parquet from './assets/textures/parquet.png?url';
 
 import * as THREE from 'three'
+import {TWEEN} from "three/addons/libs/tween.module.min.js";
+import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const debug = false;
+const debug = true;
 
 /* THREE JS */
 
@@ -17,6 +20,18 @@ const debug = false;
     const cameraPositions = {
         'about': {
             'position': {
+                x: -11,
+                y: 5.5,
+                z: -5.2
+            },
+            'rotation': {
+                x: -1.5,
+                y: 0.9,
+                z: 1.5
+            }
+        },
+        'projects': {
+            'position': {
                 x: -3,
                 y: 3,
                 z: 2
@@ -24,18 +39,6 @@ const debug = false;
             'rotation': {
                 x: 0,
                 y: -0.3,
-                z: 0
-            }
-        },
-        'projects': {
-            'position': {
-                x: 0,
-                y: 0,
-                z: 0
-            },
-            'rotation': {
-                x: 0,
-                y: 0,
                 z: 0
             }
         },
@@ -69,21 +72,12 @@ const debug = false;
     scene.background = new THREE.Color(0xD7EAA2);
 
     const camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.x = cameraPositions.about.position.x;
-    camera.position.y = cameraPositions.about.position.y;
-    camera.position.z = cameraPositions.about.position.z;
-
-    camera.rotation.x = cameraPositions.about.rotation.x;
-    camera.rotation.y = cameraPositions.about.rotation.y;
-    camera.rotation.z = cameraPositions.about.rotation.z;
+    camera.position.set(cameraPositions.about.position.x, cameraPositions.about.position.y, cameraPositions.about.position.z);
+    camera.rotation.set(cameraPositions.about.rotation.x, cameraPositions.about.rotation.y, cameraPositions.about.rotation.z);
 
     if (debug) {
-        camera.position.x = cameraPositions.build.position.x;
-        camera.position.y = cameraPositions.build.position.y;
-        camera.position.z = cameraPositions.build.position.z;
-        camera.rotation.x = cameraPositions.build.rotation.x;
-        camera.rotation.y = cameraPositions.build.rotation.y;
-        camera.rotation.z = cameraPositions.build.rotation.z;
+        camera.position.set(cameraPositions.build.position.x, cameraPositions.build.position.y, cameraPositions.build.position.z);
+        camera.rotation.set(cameraPositions.build.rotation.x, cameraPositions.build.rotation.y, cameraPositions.build.rotation.z);
     }
 
 
@@ -96,37 +90,44 @@ const debug = false;
     renderer.render( scene, camera );
 
     // Lights
-    // const ambientLight = new THREE.AmbientLight(0xffffff);
-    // scene.add(ambientLight);
+    const ambientLight = new THREE.AmbientLight(0xffffff);
+    ambientLight.intensity = 0.1;
+    scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0xffffff);
-    pointLight.position.set(4, 3, -20);
-    scene.add(pointLight);
+    const screenLight = new THREE.PointLight(0xA7DDF5);
+    screenLight.position.set(4, 3, -20);
+    scene.add(screenLight);
 
-    const particles = [];
+    const bedLight = new THREE.PointLight(0xffffff);
+    bedLight.position.set(-22.5, -2, -6);
+    bedLight.intensity = 0.4;
+    scene.add(bedLight);
 
-    function addAmbientParticle() {
-        const geometry = new THREE.SphereGeometry(0.015, 24, 24);
-        const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const particle = new THREE.Mesh(geometry, material);
-
-        const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(50));
-
-        particle.position.set(x, y, z);
-        scene.add(particle);
-
-        particles.push(particle);
-    }
-
-    Array(200).fill().forEach(addAmbientParticle);
-
-    // Models
+    // 3D
     const loader = new GLTFLoader();
+        // Particles
+
+        const particles = [];
+
+        function addAmbientParticle() {
+            const geometry = new THREE.SphereGeometry(0.015, 24, 24);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const particle = new THREE.Mesh(geometry, material);
+
+            const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(50));
+
+            particle.position.set(x, y, z);
+            scene.add(particle);
+
+            particles.push(particle);
+        }
+
+        Array(200).fill().forEach(addAmbientParticle);
+
         // Office
         loader.load(
             officeModel,
             function ( gltf ) {
-                // make model smaller
                 gltf.scene.children[0].scale.set(0.1, 0.1, 0.1);
                 gltf.scene.position.set(5, -5, -20);
                 gltf.scene.rotation.set(0, 5, 0);
@@ -137,55 +138,123 @@ const debug = false;
             }
         );
 
-        const officeBackWall = new THREE.Mesh(
-            new THREE.BoxGeometry(40, 40, 1),
+        // Walls
+
+        const roomBackWall = new THREE.Mesh(
+            new THREE.BoxGeometry(200, 200, 1),
             new THREE.MeshStandardMaterial({ color: 0x083056 })
         );
 
-        officeBackWall.position.set(-3, 13, -23);
-        officeBackWall.rotation.set(0, 0.28, 0);
+        roomBackWall.position.set(-3, 13, -23);
+        roomBackWall.rotation.set(0, 0.28, 0);
 
-        const officeSideWall = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 40, 50),
+        const roomRightSideWall = new THREE.Mesh(
+            new THREE.BoxGeometry(1, 200, 200),
             new THREE.MeshStandardMaterial({ color: 0x083056 })
         );
 
-        officeSideWall.position.set(13, 13, -23);
-        officeSideWall.rotation.set(0, 0.28, 0);
+        roomRightSideWall.position.set(13, 13, -23);
+        roomRightSideWall.rotation.set(0, 0.28, 0);
+
+
+        const roomLeftSideWall = new THREE.Mesh(
+            new THREE.BoxGeometry(1, 200, 200),
+            new THREE.MeshStandardMaterial({ color: 0x083056 })
+        );
+
+        roomLeftSideWall.position.set(-40, 13, -23);
+        roomLeftSideWall.rotation.set(0, 0.28, 0);
 
         const floorTexture = new THREE.TextureLoader().load(parquet);
         floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set( 3, 3 );
 
-        const officeFloor = new THREE.Mesh(
-            new THREE.BoxGeometry(50, 1, 50),
+        const roomFloor = new THREE.Mesh(
+            new THREE.BoxGeometry(100, 1, 100),
             new THREE.MeshStandardMaterial({ map: floorTexture })
         );
 
-        officeFloor.position.set(3, -6.7, -20);
-        officeFloor.rotation.set(0, 0.28, 0);
+        roomFloor.position.set(-15, -6.7, 30);
+        roomFloor.rotation.set(0, 0.28, 0);
 
-        scene.add(officeBackWall, officeSideWall, officeFloor);
+        scene.add(roomBackWall, roomRightSideWall, roomLeftSideWall, roomFloor);
 
-    function moveCamera() {
-        const t = document.body.getBoundingClientRect().top;
+        // Bed
+        loader.load(
+            bedModel,
+            function ( gltf ) {
+                gltf.scene.children[0].scale.set(0.1, 0.1, 0.1);
+                gltf.scene.position.set(-22.5, -6.3, -6);
+                gltf.scene.rotation.set(0, 0.3, 0);
+                scene.add( gltf.scene );
+                animate();
+            }
+        );
 
-        // camera.position.z = t * -0.01;
-        // camera.position.x = t * -0.0002;
-        // camera.position.y = t * -0.0002;
+    // Camera
+    function tweenCamera(camera, position, rotation, duration) {
+        new TWEEN.Tween(camera.position).to({
+            x: position[0],
+            y: position[1],
+            z: position[2]
+        }, duration)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .start();
+
+        new TWEEN.Tween(camera.rotation).to({
+            x: rotation[0],
+            y: rotation[1],
+            z: rotation[2]
+        }, duration)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .start();
+    }
+
+    function moveCamera(dest) {
+        switch (dest) {
+            case 'about':
+                tweenCamera(
+                    camera,
+                    [cameraPositions.about.position.x, cameraPositions.about.position.y, cameraPositions.about.position.z],
+                    [cameraPositions.about.rotation.x, cameraPositions.about.rotation.y, cameraPositions.about.rotation.z],
+                    1000
+                );
+                break;
+            case 'projects':
+                tweenCamera(
+                    camera,
+                    [cameraPositions.projects.position.x, cameraPositions.projects.position.y, cameraPositions.projects.position.z],
+                    [cameraPositions.projects.rotation.x, cameraPositions.projects.rotation.y, cameraPositions.projects.rotation.z],
+                    1000
+                );
+                break;
+            case 'contact':
+                tweenCamera(
+                    camera,
+                    [cameraPositions.contact.position.x, cameraPositions.contact.position.y, cameraPositions.contact.position.z],
+                    [cameraPositions.contact.rotation.x, cameraPositions.contact.rotation.y, cameraPositions.contact.rotation.z],
+                    1000
+                );
+                break;
+            default:
+                break;
+        }
     }
 
     document.body.onscroll = moveCamera;
     moveCamera();
 
     // Helpers
-
     if (debug) {
         const controls = new OrbitControls(camera, renderer.domElement);
-        const lightHelper = new THREE.PointLightHelper(pointLight)
+        const screenLightHelper = new THREE.PointLightHelper(screenLight)
+        const bedLightHelper = new THREE.PointLightHelper(bedLight)
 
-        scene.add(lightHelper);
+        scene.add(screenLightHelper, bedLightHelper);
     }
+
+    const stats = Stats();
+    document.body.appendChild(stats.dom);
 
     function animate() {
         requestAnimationFrame( animate );
@@ -206,6 +275,8 @@ const debug = false;
             }
         });
 
+        TWEEN.update();
+        stats.update();
         renderer.render( scene, camera );
 
         if (debug) {
@@ -231,6 +302,8 @@ const debug = false;
         }
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
+
+        moveCamera(tabName);
     }
 
     const tabLinks = document.querySelectorAll(".tablinks");
