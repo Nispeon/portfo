@@ -1,9 +1,9 @@
-import './style.css'
-import officeModel from './assets/models/office/scene.gltf?url';
-import bedModel from './assets/models/bed/scene.gltf?url';
-import catModel from './assets/models/cat/scene.gltf?url';
-import puffModel from './assets/models/jigglypuff/scene.gltf?url';
-import parquet from './assets/textures/parquet.png?url';
+import '../style/style.css'
+import officeModel from '../models/office/scene.gltf?url';
+import bedModel from '../models/bed/scene.gltf?url';
+import catModel from '../models/cat/scene.gltf?url';
+import puffModel from '../models/jigglypuff/scene.gltf?url';
+import parquet from '../textures/parquet.png?url';
 
 import * as THREE from 'three'
 import {TWEEN} from "three/addons/libs/tween.module.min.js";
