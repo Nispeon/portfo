@@ -94,7 +94,7 @@ const debug = false;
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff);
-    ambientLight.intensity = 0.1;
+    ambientLight.intensity = 0.4;
     scene.add(ambientLight);
 
     const screenLight = new THREE.PointLight(0xA7DDF5);
@@ -103,7 +103,7 @@ const debug = false;
 
     const bedLight = new THREE.PointLight(0xffffff);
     bedLight.position.set(-15, 1, 3);
-    bedLight.intensity = 0.4;
+    bedLight.intensity = 0.8;
     scene.add(bedLight);
 
     // 3D
@@ -356,7 +356,7 @@ const debug = false;
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).style.display = "grid";
         evt.currentTarget.className += " active";
 
         moveCamera(tabName);
