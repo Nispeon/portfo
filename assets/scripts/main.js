@@ -4,6 +4,7 @@ import bedModel from '../models/bed/scene.gltf?url';
 import catModel from '../models/cat/scene.gltf?url';
 import puffModel from '../models/jigglypuff/scene.gltf?url';
 import parquet from '../textures/parquet.png?url';
+import wallap from '../textures/TexturesCom_ConcreteStucco0134_1_seamless_S.jpg?url';
 
 import * as THREE from 'three'
 import {TWEEN} from "three/addons/libs/tween.module.min.js";
@@ -45,7 +46,7 @@ const debug = false;
                 z: 0
             }
         },
-        'contact': {
+        'contacts': {
             'position': {
                 x: 0,
                 y: 0,
@@ -94,7 +95,7 @@ const debug = false;
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff);
-    ambientLight.intensity = 0.4;
+    ambientLight.intensity = 0.1;
     scene.add(ambientLight);
 
     const screenLight = new THREE.PointLight(0xA7DDF5);
@@ -103,7 +104,7 @@ const debug = false;
 
     const bedLight = new THREE.PointLight(0xffffff);
     bedLight.position.set(-15, 1, 3);
-    bedLight.intensity = 0.8;
+    bedLight.intensity = 0.4;
     scene.add(bedLight);
 
     // 3D
@@ -160,9 +161,14 @@ const debug = false;
         );
 
         // Walls
+
+        const wallTexture = new THREE.TextureLoader().load(wallap);
+        wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+        wallTexture.repeat.set( 10, 10 );
+
         const roomBackWall = new THREE.Mesh(
             new THREE.BoxGeometry(200, 200, 1),
-            new THREE.MeshStandardMaterial({ color: 0x083056 })
+            new THREE.MeshStandardMaterial({ map: wallTexture})
         );
 
         roomBackWall.position.set(-3, 13, -23);
@@ -170,7 +176,7 @@ const debug = false;
 
         const roomRightSideWall = new THREE.Mesh(
             new THREE.BoxGeometry(1, 200, 200),
-            new THREE.MeshStandardMaterial({ color: 0x083056 })
+            new THREE.MeshStandardMaterial({ map: wallTexture})
         );
 
         roomRightSideWall.position.set(13, 13, -23);
@@ -179,7 +185,7 @@ const debug = false;
 
         const roomLeftSideWall = new THREE.Mesh(
             new THREE.BoxGeometry(1, 200, 200),
-            new THREE.MeshStandardMaterial({ color: 0x083056 })
+            new THREE.MeshStandardMaterial({ map: wallTexture})
         );
 
         roomLeftSideWall.position.set(-40, 13, -23);
@@ -284,11 +290,11 @@ const debug = false;
                     1000
                 );
                 break;
-            case 'contact':
+            case 'contacts':
                 tweenCamera(
                     camera,
-                    [cameraPositions.contact.position.x, cameraPositions.contact.position.y, cameraPositions.contact.position.z],
-                    [cameraPositions.contact.rotation.x, cameraPositions.contact.rotation.y, cameraPositions.contact.rotation.z],
+                    [cameraPositions.contacts.position.x, cameraPositions.contacts.position.y, cameraPositions.contacts.position.z],
+                    [cameraPositions.contacts.rotation.x, cameraPositions.contacts.rotation.y, cameraPositions.contacts.rotation.z],
                     1000
                 );
                 break;
